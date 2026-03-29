@@ -148,6 +148,16 @@
         }
 
         .kpi-card:hover { border-color: var(--border-focus); }
+        .kpi-card[data-accent] { border-top: 3px solid var(--text-muted); }
+        .kpi-card[data-accent="blue"] { border-top-color: var(--blue); }
+        .kpi-card[data-accent="purple"] { border-top-color: var(--purple); }
+        .kpi-card[data-accent="orange"] { border-top-color: var(--orange); }
+        .kpi-card[data-accent="green"] { border-top-color: var(--green); }
+        .kpi-card[data-accent="yellow"] { border-top-color: var(--yellow); }
+        .kpi-card[data-accent="red"] { border-top-color: var(--red); }
+        .kpi-card[data-accent="white"] { border-top-color: var(--text-primary); }
+
+        .kpi-card.glow { box-shadow: 0 0 20px -4px var(--glow-color, rgba(255,255,255,0.06)); }
 
         .kpi-label {
             font-size: 12px;
@@ -498,16 +508,16 @@
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
-            .main { margin-left: 0; padding: 16px 12px; padding-top: 64px; }
+            .main { margin-left: 0; padding: 20px 16px; padding-top: 64px; }
             .mobile-toggle { display: flex; }
             .form-grid { grid-template-columns: 1fr; }
-            .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .kpi-card { padding: 14px; }
-            .kpi-value { font-size: 22px; }
-            .kpi-label { font-size: 11px; }
-            .kpi-sub { font-size: 11px; }
+            .kpi-grid { grid-template-columns: 1fr; gap: 16px; }
+            .kpi-card { padding: 22px 20px; }
+            .kpi-value { font-size: 28px; }
+            .kpi-label { font-size: 11px; margin-bottom: 10px; }
+            .kpi-sub { font-size: 12px; margin-top: 6px; }
             .page-header { margin-bottom: 20px; }
-            .page-header h1 { font-size: 20px; }
+            .page-header h1 { font-size: 22px; }
             .page-header p { font-size: 13px; }
             .section { padding: 16px; margin-bottom: 16px; }
             .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -534,15 +544,9 @@
             .recap-card { padding: 14px; }
             .recap-card h4 { font-size: 13px; }
             .recap-card p { font-size: 12px; }
-            /* Recap buttons stacked on mobile */
             #page-recap > div:first-of-type { flex-wrap: wrap; }
-        }
-
-        @media (max-width: 400px) {
-            .kpi-grid { grid-template-columns: 1fr; }
-            .kpi-card { padding: 12px; }
-            .kpi-value { font-size: 20px; }
-            .main { padding: 12px 10px; padding-top: 60px; }
+            .source-legend { gap: 6px 12px; }
+            .source-legend-item { font-size: 10px; }
         }
 
         /* Tablet: sidebar visible but narrow content area */
@@ -566,6 +570,280 @@
 
         .week-selector { display: flex; align-items: center; gap: 12px; }
         .filter-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+        /* Today Highlight */
+        .today-highlight {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .today-highlight.visible { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .today-highlight .today-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .today-highlight .today-stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .today-highlight .today-stat {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+        .today-highlight .today-stat span { font-weight: 700; }
+
+        /* Streak Tracker */
+        .streak-tracker {
+            display: none;
+            margin-bottom: 16px;
+            gap: 16px;
+        }
+        .streak-tracker.visible { display: flex; flex-wrap: wrap; }
+        .streak-box {
+            flex: 1;
+            min-width: 140px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+        .streak-box .streak-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .streak-box .streak-value {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .streak-box .streak-sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .goal-bar-bg {
+            height: 6px;
+            background: var(--bg-input);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .goal-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: var(--green);
+            transition: width 0.8s ease;
+        }
+
+        /* Funnel */
+        .funnel { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+        .funnel-step { flex: 1; min-width: 0; }
+        .funnel-bar-row { height: 8px; background: var(--bg-input); border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
+        .funnel-bar { height: 100%; border-radius: 4px; transition: width 0.8s ease; min-width: 4px; }
+        .funnel-label { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+        .funnel-label span { font-weight: 700; color: var(--text-primary); font-size: 16px; }
+        .funnel-arrow { font-size: 11px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; padding-bottom: 18px; }
+
+        @media (max-width: 768px) {
+            .funnel { flex-direction: column; align-items: stretch; gap: 4px; }
+            .funnel-arrow { text-align: center; padding-bottom: 0; font-size: 10px; }
+        }
+
+        /* Quick Entry FAB */
+        .quick-entry-fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--green);
+            color: #000;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(34,197,94,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 100;
+        }
+        .quick-entry-fab:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(34,197,94,0.45); }
+        .quick-entry-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .quick-entry-overlay.show { opacity: 1; pointer-events: auto; }
+        .quick-entry-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: 16px 16px 0 0;
+            padding: 24px 20px;
+            z-index: 201;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .quick-entry-modal.show { transform: translateY(0); }
+
+        /* Range Selector Button */
+        .range-selector { position: relative; }
+        .range-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .range-btn:hover { border-color: var(--border-focus); }
+
+        /* Date Picker Dialog */
+        .dp-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 300;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .dp-overlay.show { opacity: 1; pointer-events: auto; }
+        .dp-dialog {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            z-index: 301;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+        }
+        .dp-dialog.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+        .dp-layout { display: flex; }
+        .dp-presets {
+            width: 180px;
+            border-right: 1px solid var(--border);
+            padding: 16px 8px;
+            flex-shrink: 0;
+        }
+        .dp-presets-title {
+            font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+            color: var(--text-secondary); padding: 4px 12px; margin-bottom: 4px;
+        }
+        .dp-preset {
+            padding: 7px 12px; font-size: 13px; color: var(--text-primary);
+            border-radius: 6px; cursor: pointer; transition: background 0.15s;
+        }
+        .dp-preset:hover { background: var(--accent-dim); }
+        .dp-preset.active { background: var(--accent-dim); font-weight: 600; }
+        .dp-divider { height: 1px; background: var(--border); margin: 6px 4px; }
+        .dp-calendars { padding: 16px 20px; flex: 1; min-width: 0; }
+        .dp-cal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .dp-month-label { font-size: 14px; font-weight: 600; }
+        .dp-nav {
+            background: none; border: 1px solid var(--border); border-radius: 6px;
+            color: var(--text-primary); width: 30px; height: 30px; cursor: pointer;
+            font-size: 16px; display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .dp-nav:hover { background: var(--accent-dim); }
+        .dp-cal-grid { display: flex; gap: 20px; }
+        .dp-month { flex: 1; }
+        .dp-weekdays {
+            display: grid; grid-template-columns: repeat(7, 1fr);
+            text-align: center; font-size: 11px; color: var(--text-muted);
+            margin-bottom: 4px; font-weight: 500;
+        }
+        .dp-days {
+            display: grid; grid-template-columns: repeat(7, 1fr);
+            gap: 2px; text-align: center;
+        }
+        .dp-day {
+            padding: 6px 0; font-size: 13px; border-radius: 6px;
+            cursor: pointer; transition: background 0.1s; color: var(--text-primary);
+        }
+        .dp-day:hover { background: var(--accent-dim); }
+        .dp-day.empty { pointer-events: none; }
+        .dp-day.today { font-weight: 700; color: var(--green); }
+        .dp-day.in-range { background: rgba(34,197,94,0.1); border-radius: 0; }
+        .dp-day.range-start { background: var(--green); color: #000; font-weight: 600; border-radius: 6px 0 0 6px; }
+        .dp-day.range-end { background: var(--green); color: #000; font-weight: 600; border-radius: 0 6px 6px 0; }
+        .dp-day.range-start.range-end { border-radius: 6px; }
+        .dp-day.other-month { color: var(--text-muted); }
+        .dp-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+            gap: 12px;
+        }
+        .dp-selected-range { font-size: 13px; color: var(--text-secondary); }
+        .dp-actions { display: flex; gap: 8px; }
+
+        @media (max-width: 768px) {
+            .dp-dialog {
+                top: auto; bottom: 0; left: 0; right: 0;
+                transform: translateY(100%);
+                border-radius: 16px 16px 0 0;
+                max-height: 85vh;
+            }
+            .dp-dialog.show { transform: translateY(0); }
+            .dp-layout { flex-direction: column; }
+            .dp-presets {
+                width: 100%; border-right: none; border-bottom: 1px solid var(--border);
+                padding: 12px 8px; display: flex; flex-wrap: wrap; gap: 4px;
+            }
+            .dp-presets-title { display: none; }
+            .dp-preset { padding: 6px 10px; font-size: 12px; }
+            .dp-divider { display: none; }
+            .dp-cal-grid { flex-direction: column; gap: 16px; }
+            .dp-calendars { padding: 12px 16px; }
+            .dp-footer { flex-direction: column; align-items: stretch; }
+            .dp-actions { justify-content: stretch; }
+            .dp-actions .btn { flex: 1; justify-content: center; }
+        }
+
+        /* Count-up animation helper */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .kpi-value.animate { animation: fadeInUp 0.4s ease forwards; }
     </style>
 </head>
 <body>
@@ -635,63 +913,119 @@
 
             <!-- ==================== DASHBOARD ==================== -->
             <div class="page active" id="page-dashboard">
-                <div class="page-header">
-                    <h1>Dashboard</h1>
-                    <p>Übersicht deiner aktuellen Woche</p>
+                <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p id="dashboard-subtitle">Übersicht deiner aktuellen Woche</p>
+                    </div>
+                    <div class="range-selector">
+                        <button class="range-btn" onclick="openDatePicker()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span id="range-display">Diese Woche</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- KPI Cards Row 1 -->
+                <!-- Today Highlight -->
+                <div class="today-highlight" id="today-highlight"></div>
+
+                <!-- Streak / Goal Tracker -->
+                <div class="streak-tracker" id="streak-tracker"></div>
+
                 <div class="kpi-grid" id="kpi-grid">
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="white" data-kpi="leads-total">
                         <div class="kpi-label">Leads gesamt</div>
                         <div class="kpi-value" id="kpi-leads-total">0</div>
                         <div id="kpi-leads-bar"></div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="blue" data-kpi="marketing">
                         <div class="kpi-label">Marketing Leads</div>
                         <div class="kpi-value" id="kpi-marketing" style="color:var(--blue)">0</div>
                         <div class="kpi-sub">Landingpage / Kampagnen</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="purple" data-kpi="organic">
                         <div class="kpi-label">Organische Leads</div>
                         <div class="kpi-value" id="kpi-organic" style="color:var(--purple)">0</div>
                         <div class="kpi-sub">Instagram DMs, Anfragen etc.</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="orange" data-kpi="walkins">
                         <div class="kpi-label">Walk-Ins</div>
                         <div class="kpi-value" id="kpi-walkins" style="color:var(--orange)">0</div>
                         <div class="kpi-sub">Laufkundschaft</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="green" data-kpi="returning">
                         <div class="kpi-label">Stammkunden</div>
                         <div class="kpi-value" id="kpi-returning" style="color:var(--green)">0</div>
                         <div class="kpi-sub">Wiederkehrende Kunden</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="yellow" data-kpi="consultations">
                         <div class="kpi-label">Beratungen</div>
                         <div class="kpi-value" id="kpi-consultations" style="color:var(--yellow)">0</div>
                         <div class="kpi-sub">stattgefunden</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="red" data-kpi="appointments">
                         <div class="kpi-label">Termine gebucht</div>
                         <div class="kpi-value" id="kpi-appointments-booked" style="color:var(--red)">0</div>
                         <div class="kpi-sub">Tattoo-Termine</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="white" data-kpi="cancellations">
                         <div class="kpi-label">Absagen</div>
                         <div class="kpi-value" id="kpi-cancellations">0</div>
                         <div class="kpi-sub" id="kpi-cancellations-detail">Beratung: 0 | Termin: 0</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="green" data-kpi="revenue">
                         <div class="kpi-label">Umsatz</div>
                         <div class="kpi-value" id="kpi-revenue">0 €</div>
                         <div class="kpi-sub">durch Tattoos</div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" data-accent="white" data-kpi="conversion">
                         <div class="kpi-label">Conversion Rate</div>
                         <div class="kpi-value" id="kpi-conversion">0%</div>
                         <div class="kpi-sub">Beratung → Termin</div>
                     </div>
+                </div>
+
+                <!-- Quick Entry FAB -->
+                <button class="quick-entry-fab" id="quick-entry-fab" onclick="openQuickEntry()" title="Schnelleintrag">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+
+                <!-- Quick Entry Modal -->
+                <div class="quick-entry-overlay" id="quick-entry-overlay" onclick="closeQuickEntry()"></div>
+                <div class="quick-entry-modal" id="quick-entry-modal">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                        <h3 style="font-size:16px;font-weight:600;">Schnelleintrag</h3>
+                        <button class="btn-icon" onclick="closeQuickEntry()" style="font-size:18px;">&times;</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div>
+                            <label style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Marketing</label>
+                            <input type="number" id="qe-marketing" min="0" class="form-input" placeholder="0">
+                        </div>
+                        <div>
+                            <label style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Organisch</label>
+                            <input type="number" id="qe-organic" min="0" class="form-input" placeholder="0">
+                        </div>
+                        <div>
+                            <label style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Walk-Ins</label>
+                            <input type="number" id="qe-walkins" min="0" class="form-input" placeholder="0">
+                        </div>
+                        <div>
+                            <label style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Stammkunden</label>
+                            <input type="number" id="qe-returning" min="0" class="form-input" placeholder="0">
+                        </div>
+                        <div>
+                            <label style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Beratungen</label>
+                            <input type="number" id="qe-consultations" min="0" class="form-input" placeholder="0">
+                        </div>
+                        <div>
+                            <label style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Umsatz (€)</label>
+                            <input type="number" id="qe-revenue" min="0" step="0.01" class="form-input" placeholder="0">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="saveQuickEntry()" style="width:100%;margin-top:16px;justify-content:center;background:var(--green);color:#000;font-weight:600;">Speichern</button>
                 </div>
 
                 <!-- Chart -->
@@ -960,6 +1294,46 @@
         </main>
     </div>
 
+    <!-- Date Picker Dialog -->
+    <div class="dp-overlay" id="dp-overlay" onclick="closeDatePicker()"></div>
+    <div class="dp-dialog" id="dp-dialog">
+        <div class="dp-layout">
+            <div class="dp-presets">
+                <div class="dp-presets-title">Zeitraum</div>
+                <div class="dp-preset active" data-range="this-week" onclick="dpSelectPreset('this-week')">Diese Woche</div>
+                <div class="dp-preset" data-range="today" onclick="dpSelectPreset('today')">Heute</div>
+                <div class="dp-preset" data-range="yesterday" onclick="dpSelectPreset('yesterday')">Gestern</div>
+                <div class="dp-divider"></div>
+                <div class="dp-preset" data-range="7d" onclick="dpSelectPreset('7d')">Letzte 7 Tage</div>
+                <div class="dp-preset" data-range="14d" onclick="dpSelectPreset('14d')">Letzte 14 Tage</div>
+                <div class="dp-preset" data-range="30d" onclick="dpSelectPreset('30d')">Letzte 30 Tage</div>
+                <div class="dp-divider"></div>
+                <div class="dp-preset" data-range="this-month" onclick="dpSelectPreset('this-month')">Dieser Monat</div>
+                <div class="dp-preset" data-range="last-month" onclick="dpSelectPreset('last-month')">Letzter Monat</div>
+                <div class="dp-preset" data-range="quarter" onclick="dpSelectPreset('quarter')">Quartal</div>
+            </div>
+            <div class="dp-calendars">
+                <div class="dp-cal-header">
+                    <button class="dp-nav" onclick="dpNav(-1)">‹</button>
+                    <span class="dp-month-label" id="dp-month-left"></span>
+                    <span class="dp-month-label" id="dp-month-right"></span>
+                    <button class="dp-nav" onclick="dpNav(1)">›</button>
+                </div>
+                <div class="dp-cal-grid">
+                    <div class="dp-month" id="dp-cal-left"></div>
+                    <div class="dp-month" id="dp-cal-right"></div>
+                </div>
+                <div class="dp-footer">
+                    <div class="dp-selected-range" id="dp-range-label">–</div>
+                    <div class="dp-actions">
+                        <button class="btn btn-secondary btn-sm" onclick="closeDatePicker()">Abbrechen</button>
+                        <button class="btn btn-sm" onclick="dpApply()" style="background:var(--green);color:#000;font-weight:600;">Anwenden</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <div class="modal-overlay" id="delete-modal">
@@ -1099,6 +1473,9 @@
 
         // ==================== STATE ====================
         let currentWeekOffset = 0;
+        let currentDateRange = 'this-week';
+        let customRangeFrom = null;
+        let customRangeTo = null;
         let recapWeekOffset = 0;
         let deleteTargetDate = null;
 
@@ -1164,6 +1541,256 @@
             const monStr = dateToStr(monday);
             const sunStr = dateToStr(sunday);
             return data.filter(e => e.date >= monStr && e.date <= sunStr).sort((a, b) => a.date.localeCompare(b.date));
+        }
+
+        function getDateRange(rangeKey) {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let from, to;
+            switch (rangeKey) {
+                case 'today':
+                    from = to = new Date(today);
+                    break;
+                case 'yesterday':
+                    from = to = new Date(today);
+                    from.setDate(from.getDate() - 1);
+                    to = new Date(from);
+                    break;
+                case 'this-week':
+                    from = getMonday(today);
+                    to = new Date(from);
+                    to.setDate(to.getDate() + 6);
+                    break;
+                case '7d':
+                    from = new Date(today);
+                    from.setDate(from.getDate() - 6);
+                    to = new Date(today);
+                    break;
+                case '14d':
+                    from = new Date(today);
+                    from.setDate(from.getDate() - 13);
+                    to = new Date(today);
+                    break;
+                case '30d':
+                    from = new Date(today);
+                    from.setDate(from.getDate() - 29);
+                    to = new Date(today);
+                    break;
+                case 'this-month':
+                    from = new Date(today.getFullYear(), today.getMonth(), 1);
+                    to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                    break;
+                case 'last-month':
+                    from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+                    to = new Date(today.getFullYear(), today.getMonth(), 0);
+                    break;
+                case 'quarter':
+                    const qMonth = Math.floor(today.getMonth() / 3) * 3;
+                    from = new Date(today.getFullYear(), qMonth, 1);
+                    to = new Date(today.getFullYear(), qMonth + 3, 0);
+                    break;
+                case 'custom':
+                    from = customRangeFrom ? new Date(customRangeFrom + 'T00:00:00') : new Date(today);
+                    to = customRangeTo ? new Date(customRangeTo + 'T00:00:00') : new Date(today);
+                    break;
+                default:
+                    from = getMonday(today);
+                    to = new Date(from);
+                    to.setDate(to.getDate() + 6);
+            }
+            return { from, to };
+        }
+
+        function getDateRangeEntries(rangeKey) {
+            const { from, to } = getDateRange(rangeKey);
+            const data = getData();
+            const fromStr = dateToStr(from);
+            const toStr = dateToStr(to);
+            return data.filter(e => e.date >= fromStr && e.date <= toStr).sort((a, b) => a.date.localeCompare(b.date));
+        }
+
+        function getDateRangeLabel(rangeKey) {
+            const labels = {
+                'today': 'Heute',
+                'yesterday': 'Gestern',
+                'this-week': 'Diese Woche',
+                '7d': 'Letzte 7 Tage',
+                '14d': 'Letzte 14 Tage',
+                '30d': 'Letzte 30 Tage',
+                'this-month': 'Dieser Monat',
+                'last-month': 'Letzter Monat',
+                'quarter': 'Quartal'
+            };
+            return labels[rangeKey] || 'Diese Woche';
+        }
+
+        function setDateRange(rangeKey) {
+            currentDateRange = rangeKey;
+            document.getElementById('range-display').textContent = getDateRangeLabel(rangeKey);
+            refreshDashboard();
+        }
+
+        // ==================== DATE PICKER ====================
+        let dpMonth = new Date().getMonth();
+        let dpYear = new Date().getFullYear();
+        let dpSelFrom = null;
+        let dpSelTo = null;
+        let dpSelecting = false; // true = waiting for end date
+
+        function openDatePicker() {
+            // Init calendar to show current range
+            const { from, to } = getDateRange(currentDateRange);
+            dpSelFrom = dateToStr(from);
+            dpSelTo = dateToStr(to);
+            dpMonth = from.getMonth();
+            dpYear = from.getFullYear();
+            dpSelecting = false;
+
+            // Highlight active preset
+            document.querySelectorAll('.dp-preset').forEach(p => {
+                p.classList.toggle('active', p.dataset.range === currentDateRange);
+            });
+
+            renderCalendars();
+            updateDpRangeLabel();
+            document.getElementById('dp-overlay').classList.add('show');
+            document.getElementById('dp-dialog').classList.add('show');
+        }
+
+        function closeDatePicker() {
+            document.getElementById('dp-overlay').classList.remove('show');
+            document.getElementById('dp-dialog').classList.remove('show');
+        }
+
+        function dpNav(dir) {
+            dpMonth += dir;
+            if (dpMonth > 11) { dpMonth = 0; dpYear++; }
+            if (dpMonth < 0) { dpMonth = 11; dpYear--; }
+            renderCalendars();
+        }
+
+        function dpSelectPreset(rangeKey) {
+            const { from, to } = getDateRange(rangeKey);
+            dpSelFrom = dateToStr(from);
+            dpSelTo = dateToStr(to);
+            dpSelecting = false;
+            dpMonth = from.getMonth();
+            dpYear = from.getFullYear();
+
+            document.querySelectorAll('.dp-preset').forEach(p => {
+                p.classList.toggle('active', p.dataset.range === rangeKey);
+            });
+
+            // Store which preset was selected
+            currentDateRange = rangeKey;
+            renderCalendars();
+            updateDpRangeLabel();
+        }
+
+        function dpClickDay(dateStr) {
+            // Clear preset highlight when manually selecting
+            document.querySelectorAll('.dp-preset').forEach(p => p.classList.remove('active'));
+            currentDateRange = 'custom';
+
+            if (!dpSelecting || !dpSelFrom) {
+                // First click: set start
+                dpSelFrom = dateStr;
+                dpSelTo = null;
+                dpSelecting = true;
+            } else {
+                // Second click: set end
+                if (dateStr < dpSelFrom) {
+                    dpSelTo = dpSelFrom;
+                    dpSelFrom = dateStr;
+                } else {
+                    dpSelTo = dateStr;
+                }
+                dpSelecting = false;
+            }
+            renderCalendars();
+            updateDpRangeLabel();
+        }
+
+        function updateDpRangeLabel() {
+            const label = document.getElementById('dp-range-label');
+            if (dpSelFrom && dpSelTo) {
+                const f = new Date(dpSelFrom + 'T00:00:00');
+                const t = new Date(dpSelTo + 'T00:00:00');
+                label.textContent = f.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+                    ' – ' + t.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            } else if (dpSelFrom) {
+                const f = new Date(dpSelFrom + 'T00:00:00');
+                label.textContent = f.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' – …';
+            } else {
+                label.textContent = '–';
+            }
+        }
+
+        function dpApply() {
+            if (!dpSelFrom) return;
+            if (!dpSelTo) dpSelTo = dpSelFrom;
+
+            customRangeFrom = dpSelFrom;
+            customRangeTo = dpSelTo;
+
+            if (currentDateRange === 'custom') {
+                const f = new Date(dpSelFrom + 'T00:00:00');
+                const t = new Date(dpSelTo + 'T00:00:00');
+                document.getElementById('range-display').textContent =
+                    f.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' – ' +
+                    t.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+            } else {
+                document.getElementById('range-display').textContent = getDateRangeLabel(currentDateRange);
+            }
+
+            closeDatePicker();
+            refreshDashboard();
+        }
+
+        function renderCalendars() {
+            const monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+            const dayNames = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+
+            // Left = dpMonth/dpYear, Right = next month
+            let rightMonth = dpMonth + 1, rightYear = dpYear;
+            if (rightMonth > 11) { rightMonth = 0; rightYear++; }
+
+            document.getElementById('dp-month-left').textContent = monthNames[dpMonth] + ' ' + dpYear;
+            document.getElementById('dp-month-right').textContent = monthNames[rightMonth] + ' ' + rightYear;
+
+            document.getElementById('dp-cal-left').innerHTML = renderMonth(dpYear, dpMonth, dayNames);
+            document.getElementById('dp-cal-right').innerHTML = renderMonth(rightYear, rightMonth, dayNames);
+        }
+
+        function renderMonth(year, month, dayNames) {
+            const todayS = todayStr();
+            const firstDay = new Date(year, month, 1).getDay();
+            const offset = (firstDay === 0 ? 6 : firstDay - 1); // Monday-based
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let html = '<div class="dp-weekdays">';
+            dayNames.forEach(d => html += `<div>${d}</div>`);
+            html += '</div><div class="dp-days">';
+
+            // Empty cells
+            for (let i = 0; i < offset; i++) html += '<div class="dp-day empty"></div>';
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const ds = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                let cls = 'dp-day';
+                if (ds === todayS) cls += ' today';
+                if (dpSelFrom && dpSelTo) {
+                    if (ds === dpSelFrom) cls += ' range-start';
+                    if (ds === dpSelTo) cls += ' range-end';
+                    if (ds > dpSelFrom && ds < dpSelTo) cls += ' in-range';
+                } else if (dpSelFrom && ds === dpSelFrom) {
+                    cls += ' range-start range-end';
+                }
+                html += `<div class="${cls}" onclick="dpClickDay('${ds}')">${d}</div>`;
+            }
+
+            html += '</div>';
+            return html;
         }
 
         function showToast(msg) {
@@ -1327,9 +1954,21 @@
 
         // ==================== DASHBOARD ====================
         function refreshDashboard() {
-            const entries = getWeekEntries(currentWeekOffset);
-            const { monday, sunday } = getWeekDates(currentWeekOffset);
+            const entries = getDateRangeEntries(currentDateRange);
+            const { from, to } = getDateRange(currentDateRange);
 
+            // Update subtitle
+            const fromStr = from.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+            const toStr = to.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const subtitle = document.getElementById('dashboard-subtitle');
+            if (currentDateRange === 'today' || currentDateRange === 'yesterday') {
+                subtitle.textContent = from.toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+            } else {
+                subtitle.textContent = fromStr + ' – ' + toStr;
+            }
+
+            // Chart week display (chart stays weekly)
+            const { monday, sunday } = getWeekDates(currentWeekOffset);
             document.getElementById('week-display').textContent =
                 monday.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' – ' +
                 sunday.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -1352,17 +1991,67 @@
 
             const conversion = totals.consultations > 0 ? Math.round((totals.appointmentsBooked / totals.consultations) * 100) : 0;
 
-            document.getElementById('kpi-leads-total').textContent = totals.leads;
-            document.getElementById('kpi-marketing').textContent = totals.marketing;
-            document.getElementById('kpi-organic').textContent = totals.organic;
-            document.getElementById('kpi-walkins').textContent = totals.walkins;
-            document.getElementById('kpi-returning').textContent = totals.returning;
-            document.getElementById('kpi-consultations').textContent = totals.consultations;
-            document.getElementById('kpi-appointments-booked').textContent = totals.appointmentsBooked;
-            document.getElementById('kpi-cancellations').textContent = totals.consultationCancelled + totals.appointmentCancelled;
+            // Count-up animation helper
+            function animateValue(el, end, suffix, prefix) {
+                suffix = suffix || '';
+                prefix = prefix || '';
+                const duration = 600;
+                const start = 0;
+                const startTime = performance.now();
+                el.classList.add('animate');
+                if (end === 0) { el.textContent = prefix + '0' + suffix; return; }
+                function tick(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.round(start + (end - start) * eased);
+                    el.textContent = prefix + current.toLocaleString('de-DE') + suffix;
+                    if (progress < 1) requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+            }
+
+            animateValue(document.getElementById('kpi-leads-total'), totals.leads);
+            animateValue(document.getElementById('kpi-marketing'), totals.marketing);
+            animateValue(document.getElementById('kpi-organic'), totals.organic);
+            animateValue(document.getElementById('kpi-walkins'), totals.walkins);
+            animateValue(document.getElementById('kpi-returning'), totals.returning);
+            animateValue(document.getElementById('kpi-consultations'), totals.consultations);
+            animateValue(document.getElementById('kpi-appointments-booked'), totals.appointmentsBooked);
+            animateValue(document.getElementById('kpi-cancellations'), totals.consultationCancelled + totals.appointmentCancelled);
             document.getElementById('kpi-cancellations-detail').textContent = `Beratung: ${totals.consultationCancelled} | Termin: ${totals.appointmentCancelled}`;
-            document.getElementById('kpi-revenue').textContent = totals.revenue.toLocaleString('de-DE') + ' €';
-            document.getElementById('kpi-conversion').textContent = conversion + '%';
+            animateValue(document.getElementById('kpi-revenue'), totals.revenue, ' €');
+            animateValue(document.getElementById('kpi-conversion'), conversion, '%');
+
+            // Glow effect on cards with data
+            const glowMap = {
+                'leads-total': { val: totals.leads, color: 'rgba(255,255,255,0.06)' },
+                'marketing': { val: totals.marketing, color: 'rgba(59,130,246,0.15)' },
+                'organic': { val: totals.organic, color: 'rgba(168,85,247,0.15)' },
+                'walkins': { val: totals.walkins, color: 'rgba(249,115,22,0.15)' },
+                'returning': { val: totals.returning, color: 'rgba(34,197,94,0.15)' },
+                'consultations': { val: totals.consultations, color: 'rgba(234,179,8,0.15)' },
+                'appointments': { val: totals.appointmentsBooked, color: 'rgba(239,68,68,0.15)' },
+                'cancellations': { val: totals.consultationCancelled + totals.appointmentCancelled, color: 'rgba(255,255,255,0.06)' },
+                'revenue': { val: totals.revenue, color: 'rgba(34,197,94,0.15)' },
+                'conversion': { val: conversion, color: 'rgba(255,255,255,0.06)' }
+            };
+            document.querySelectorAll('.kpi-card[data-kpi]').forEach(card => {
+                const key = card.dataset.kpi;
+                const info = glowMap[key];
+                if (info && info.val > 0) {
+                    card.classList.add('glow');
+                    card.style.setProperty('--glow-color', info.color);
+                } else {
+                    card.classList.remove('glow');
+                }
+            });
+
+            // Today Highlight
+            updateTodayHighlight();
+
+            // Streak Tracker
+            updateStreakTracker();
 
             // Source breakdown bar
             const barContainer = document.getElementById('kpi-leads-bar');
@@ -1388,12 +2077,157 @@
                 barContainer.innerHTML = '<div class="kpi-sub">Noch keine Daten</div>';
             }
 
-            renderChart(entries, monday);
+            // Chart always uses week view
+            const chartEntries = getWeekEntries(currentWeekOffset);
+            renderChart(chartEntries, monday);
             renderRecentTable(entries);
         }
 
         function changeWeek(dir) {
             currentWeekOffset += dir;
+            refreshDashboard();
+        }
+
+        // ==================== TODAY HIGHLIGHT ====================
+        function updateTodayHighlight() {
+            const el = document.getElementById('today-highlight');
+            const today = todayStr();
+            const data = getData();
+            const entry = data.find(e => e.date === today);
+            if (entry) {
+                const t = entryTotals(entry);
+                el.innerHTML = `
+                    <div class="today-label">Heute</div>
+                    <div class="today-stats">
+                        <div class="today-stat"><span>${t.totalLeads}</span> Leads</div>
+                        <div class="today-stat"><span>${entry.consultationsDone || 0}</span> Beratungen</div>
+                        <div class="today-stat"><span>${t.appointmentsBooked}</span> Termine</div>
+                        <div class="today-stat"><span>${(entry.revenue || 0).toLocaleString('de-DE')} €</span></div>
+                    </div>`;
+                el.classList.add('visible');
+            } else {
+                el.classList.remove('visible');
+                el.innerHTML = '';
+            }
+        }
+
+        // ==================== FUNNEL + GOAL TRACKER ====================
+        function updateStreakTracker() {
+            const el = document.getElementById('streak-tracker');
+            const entries = getDateRangeEntries(currentDateRange);
+
+            let leads = 0, consultations = 0, appointments = 0;
+            entries.forEach(e => {
+                const t = entryTotals(e);
+                leads += t.totalLeads;
+                consultations += e.consultationsDone || 0;
+                appointments += t.appointmentsBooked;
+            });
+
+            const convLeads = leads > 0 ? Math.round((consultations / leads) * 100) : 0;
+            const convConsult = consultations > 0 ? Math.round((appointments / consultations) * 100) : 0;
+
+            // Funnel bar widths (leads = 100%)
+            const barConsult = leads > 0 ? Math.max((consultations / leads) * 100, 4) : 0;
+            const barAppoint = leads > 0 ? Math.max((appointments / leads) * 100, 4) : 0;
+
+            // Weekly lead goal (editable target)
+            const weekEntries = getWeekEntries(currentWeekOffset);
+            let weekLeads = 0;
+            weekEntries.forEach(e => { weekLeads += entryTotals(e).totalLeads; });
+            const goalTarget = parseInt(localStorage.getItem('whynot_lead_goal')) || 20;
+            const goalPct = Math.min(Math.round((weekLeads / goalTarget) * 100), 100);
+
+            el.innerHTML = `
+                <div class="streak-box" style="flex:2;">
+                    <div class="streak-title">Conversion Funnel</div>
+                    <div class="funnel">
+                        <div class="funnel-step">
+                            <div class="funnel-bar-row">
+                                <div class="funnel-bar" style="width:100%;background:var(--blue);"></div>
+                            </div>
+                            <div class="funnel-label"><span>${leads}</span> Leads</div>
+                        </div>
+                        <div class="funnel-arrow">→ ${convLeads}%</div>
+                        <div class="funnel-step">
+                            <div class="funnel-bar-row">
+                                <div class="funnel-bar" style="width:${barConsult}%;background:var(--yellow);"></div>
+                            </div>
+                            <div class="funnel-label"><span>${consultations}</span> Beratungen</div>
+                        </div>
+                        <div class="funnel-arrow">→ ${convConsult}%</div>
+                        <div class="funnel-step">
+                            <div class="funnel-bar-row">
+                                <div class="funnel-bar" style="width:${barAppoint}%;background:var(--green);"></div>
+                            </div>
+                            <div class="funnel-label"><span>${appointments}</span> Termine</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="streak-box">
+                    <div class="streak-title" style="display:flex;justify-content:space-between;align-items:center;">
+                        Wochenziel Leads
+                        <button onclick="editGoal()" class="btn-icon" style="font-size:12px;color:var(--text-secondary);padding:2px 6px;" title="Ziel anpassen">✎</button>
+                    </div>
+                    <div class="streak-value" id="goal-display">${weekLeads} / ${goalTarget}</div>
+                    <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:${goalPct}%"></div></div>
+                    <div class="streak-sub" style="margin-top:6px;">${goalPct >= 100 ? 'Ziel erreicht!' : goalPct + '% erreicht'}</div>
+                </div>`;
+            el.classList.add('visible');
+        }
+
+        function editGoal() {
+            const current = parseInt(localStorage.getItem('whynot_lead_goal')) || 20;
+            const display = document.getElementById('goal-display');
+            display.innerHTML = `<input type="number" id="goal-input" value="${current}" min="1" style="width:80px;background:var(--bg-input);border:1px solid var(--border);border-radius:6px;padding:4px 8px;color:var(--text-primary);font-size:18px;font-weight:700;font-family:inherit;" onkeydown="if(event.key==='Enter')saveGoal()"> <button onclick="saveGoal()" class="btn" style="padding:4px 12px;font-size:12px;">OK</button>`;
+            document.getElementById('goal-input').focus();
+        }
+
+        function saveGoal() {
+            const val = parseInt(document.getElementById('goal-input').value) || 20;
+            localStorage.setItem('whynot_lead_goal', val);
+            showToast('Wochenziel auf ' + val + ' Leads gesetzt');
+            refreshDashboard();
+        }
+
+        // ==================== QUICK ENTRY ====================
+        function openQuickEntry() {
+            document.getElementById('quick-entry-overlay').classList.add('show');
+            document.getElementById('quick-entry-modal').classList.add('show');
+        }
+
+        function closeQuickEntry() {
+            document.getElementById('quick-entry-overlay').classList.remove('show');
+            document.getElementById('quick-entry-modal').classList.remove('show');
+        }
+
+        function saveQuickEntry() {
+            const today = todayStr();
+            const data = getData();
+            let entry = data.find(e => e.date === today);
+            if (!entry) {
+                entry = { date: today };
+                data.push(entry);
+            }
+
+            // Add values to existing (merge, not overwrite)
+            entry.marketingLeads = (entry.marketingLeads || 0) + (parseInt(document.getElementById('qe-marketing').value) || 0);
+            entry.organicLeads = (entry.organicLeads || 0) + (parseInt(document.getElementById('qe-organic').value) || 0);
+            entry.walkins = (entry.walkins || 0) + (parseInt(document.getElementById('qe-walkins').value) || 0);
+            entry.returning = (entry.returning || 0) + (parseInt(document.getElementById('qe-returning').value) || 0);
+            entry.consultationsDone = (entry.consultationsDone || 0) + (parseInt(document.getElementById('qe-consultations').value) || 0);
+            entry.revenue = (entry.revenue || 0) + (parseFloat(document.getElementById('qe-revenue').value) || 0);
+
+            data.sort((a, b) => a.date.localeCompare(b.date));
+            saveData(data);
+
+            // Reset quick entry fields
+            ['qe-marketing', 'qe-organic', 'qe-walkins', 'qe-returning', 'qe-consultations', 'qe-revenue'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+
+            closeQuickEntry();
+            showToast('Schnelleintrag gespeichert');
             refreshDashboard();
         }
 
