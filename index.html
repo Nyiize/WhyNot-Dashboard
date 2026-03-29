@@ -71,6 +71,7 @@
             top: 0; left: 0; bottom: 0;
             z-index: 100;
             transition: transform 0.3s ease;
+            overflow-y: auto;
         }
 
         .sidebar-logo {
@@ -522,8 +523,12 @@
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:40px;max-width:380px;width:100%;text-align:center;">
             <div style="font-size:28px;font-weight:700;letter-spacing:4px;margin-bottom:4px;">WHYNOT</div>
             <div style="font-size:12px;color:var(--text-secondary);letter-spacing:2px;margin-bottom:32px;">DASHBOARD</div>
-            <div style="margin-bottom:16px;">
-                <input type="password" id="login-password" class="form-input" placeholder="Passwort eingeben" style="width:100%;text-align:center;font-size:16px;" onkeydown="if(event.key==='Enter')doLogin()">
+            <div style="margin-bottom:16px;position:relative;">
+                <input type="password" id="login-password" class="form-input" placeholder="Passwort eingeben" style="width:100%;text-align:center;font-size:16px;padding-right:44px;" onkeydown="if(event.key==='Enter')doLogin()">
+                <button type="button" onclick="togglePassword()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;" id="pw-toggle">
+                    <svg id="pw-eye" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg id="pw-eye-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
             </div>
             <div id="login-error" style="color:var(--red);font-size:13px;margin-bottom:12px;display:none;">Falsches Passwort</div>
             <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">Anmelden</button>
@@ -566,7 +571,11 @@
 
             <div style="flex:1"></div>
             <div style="padding: 12px; border-top: 1px solid var(--border); margin-top: 16px;">
-                <div style="font-size: 12px; color: var(--text-muted);">Daten werden lokal gespeichert</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Daten werden lokal gespeichert</div>
+                <div class="nav-item" onclick="doLogout()" style="color:var(--text-muted);cursor:pointer;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Abmelden
+                </div>
             </div>
         </nav>
 
@@ -936,6 +945,25 @@
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function togglePassword() {
+            const input = document.getElementById('login-password');
+            const eyeOpen = document.getElementById('pw-eye');
+            const eyeOff = document.getElementById('pw-eye-off');
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeOff.style.display = 'block';
+            } else {
+                input.type = 'password';
+                eyeOpen.style.display = 'block';
+                eyeOff.style.display = 'none';
+            }
+        }
+
+        function doLogout() {
+            firebase.auth().signOut();
         }
 
         async function doLogin() {
