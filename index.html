@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WHYNOT — Dashboard</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -898,16 +900,73 @@
     </div>
 
     <script>
+        // ==================== FIREBASE CONFIG ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyD8UL3FgD44SUJGoXGLvHwCNZBZJvhhGpE",
+            authDomain: "whynot-dashboard.firebaseapp.com",
+            databaseURL: "https://whynot-dashboard-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "whynot-dashboard",
+            storageBucket: "whynot-dashboard.firebasestorage.app",
+            messagingSenderId: "48027755112",
+            appId: "1:48027755112:web:0d49ac5a736c4379fe91dd"
+        };
+
+        let firebaseReady = false;
+        let dbRef = null;
+
+        if (firebaseConfig.apiKey) {
+            firebase.initializeApp(firebaseConfig);
+            dbRef = firebase.database().ref('entries');
+            firebaseReady = true;
+
+            // Real-time listener: auto-refresh when data changes
+            dbRef.on('value', () => {
+                refreshDashboard();
+                if (document.getElementById('page-history').classList.contains('active')) {
+                    renderHistory();
+                }
+            });
+        }
+
         // ==================== DATA LAYER ====================
         const STORAGE_KEY = 'whynot_dashboard_data';
 
         function getData() {
+            // Synchronous read from localStorage cache (always up to date via listener)
             const raw = localStorage.getItem(STORAGE_KEY);
             return raw ? JSON.parse(raw) : [];
         }
 
         function saveData(data) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            // Sync to Firebase
+            if (firebaseReady) {
+                const obj = {};
+                data.forEach(e => { obj[e.date] = e; });
+                dbRef.set(obj);
+            }
+        }
+
+        function deleteEntry(dateStr) {
+            let data = getData();
+            data = data.filter(e => e.date !== dateStr);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            if (firebaseReady) {
+                dbRef.child(dateStr).remove();
+            }
+        }
+
+        // Pull all data from Firebase on first load
+        function syncFromFirebase() {
+            if (!firebaseReady) return;
+            dbRef.once('value').then(snapshot => {
+                const val = snapshot.val();
+                if (val) {
+                    const data = Object.values(val).sort((a, b) => a.date.localeCompare(b.date));
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                    refreshDashboard();
+                }
+            });
         }
 
         // ==================== STATE ====================
@@ -1131,9 +1190,7 @@
 
         function confirmDelete() {
             if (!deleteTargetDate) return;
-            let data = getData();
-            data = data.filter(e => e.date !== deleteTargetDate);
-            saveData(data);
+            deleteEntry(deleteTargetDate);
             closeDeleteModal();
             showToast('Eintrag gelöscht');
             renderHistory();
@@ -1557,6 +1614,7 @@
             document.getElementById('entry-date').value = todayStr();
             refreshDashboard();
             updateRecapWeekDisplay();
+            syncFromFirebase();
         }
 
         init();
