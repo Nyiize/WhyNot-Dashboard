@@ -593,13 +593,18 @@
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Beratungen</div>
-                        <div class="kpi-value" id="kpi-consultations">0</div>
+                        <div class="kpi-value" id="kpi-consultations" style="color:var(--yellow)">0</div>
                         <div class="kpi-sub">stattgefunden</div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Termine gebucht</div>
-                        <div class="kpi-value" id="kpi-booked">0</div>
-                        <div class="kpi-sub">alle Quellen</div>
+                        <div class="kpi-value" id="kpi-appointments-booked" style="color:var(--red)">0</div>
+                        <div class="kpi-sub">Tattoo-Termine</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Absagen</div>
+                        <div class="kpi-value" id="kpi-cancellations">0</div>
+                        <div class="kpi-sub" id="kpi-cancellations-detail">Beratung: 0 | Termin: 0</div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Umsatz</div>
@@ -609,7 +614,7 @@
                     <div class="kpi-card">
                         <div class="kpi-label">Conversion Rate</div>
                         <div class="kpi-value" id="kpi-conversion">0%</div>
-                        <div class="kpi-sub">Lead → Termin</div>
+                        <div class="kpi-sub">Beratung → Termin</div>
                     </div>
                 </div>
 
@@ -712,7 +717,7 @@
                             <input type="number" class="form-input" id="entry-organic-leads" min="0" placeholder="0">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Davon: Termin/Beratung gebucht</label>
+                            <label class="form-label">Davon: Beratung gebucht</label>
                             <input type="number" class="form-input" id="entry-organic-booked" min="0" placeholder="0">
                         </div>
                         <div class="form-group full-width">
@@ -736,7 +741,7 @@
                             <input type="number" class="form-input" id="entry-walkins" min="0" placeholder="0">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Davon: Termin/Beratung gebucht</label>
+                            <label class="form-label">Davon: Beratung gebucht</label>
                             <input type="number" class="form-input" id="entry-walkins-booked" min="0" placeholder="0">
                         </div>
                     </div>
@@ -762,12 +767,12 @@
                     </div>
                 </div>
 
-                <!-- Beratungen & Termine -->
-                <div class="section">
+                <!-- Beratungen -->
+                <div class="section" style="border-left: 3px solid var(--yellow);">
                     <div class="section-header">
                         <div>
-                            <div class="section-title">Beratungen & Termine</div>
-                            <div class="section-subtitle">Unabhängig von der Quelle</div>
+                            <div class="section-title">Beratungen</div>
+                            <div class="section-subtitle">Kostenlose Erstberatungen</div>
                         </div>
                     </div>
                     <div class="form-grid">
@@ -776,8 +781,28 @@
                             <input type="number" class="form-input" id="entry-consultations-done" min="0" placeholder="0">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Termine abgesagt / verschoben</label>
-                            <input type="number" class="form-input" id="entry-cancelled" min="0" placeholder="0">
+                            <label class="form-label">Beratung abgesagt / verschoben</label>
+                            <input type="number" class="form-input" id="entry-consultation-cancelled" min="0" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Termine -->
+                <div class="section" style="border-left: 3px solid var(--red);">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">Termine</div>
+                            <div class="section-subtitle">Tattoo-Termine</div>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Termin gebucht</label>
+                            <input type="number" class="form-input" id="entry-appointments-booked" min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Termin abgesagt / verschoben</label>
+                            <input type="number" class="form-input" id="entry-appointment-cancelled" min="0" placeholder="0">
                         </div>
                         <div class="form-group">
                             <label class="form-label">No-Shows</label>
@@ -977,8 +1002,11 @@
             const walkins = e.walkins || 0;
             const returning = e.returning || 0;
             const totalLeads = marketing + organic + walkins + returning;
-            const totalBooked = (e.marketingBooked || 0) + (e.organicBooked || 0) + (e.walkinsBooked || 0) + (e.returningBooked || 0);
-            return { marketing, organic, walkins, returning, totalLeads, totalBooked };
+            const consultationBooked = (e.marketingBooked || 0) + (e.organicBooked || 0) + (e.walkinsBooked || 0) + (e.returningBooked || 0);
+            const appointmentsBooked = e.appointmentsBooked || 0;
+            const consultationCancelled = e.consultationCancelled || 0;
+            const appointmentCancelled = e.appointmentCancelled || (e.cancelled || 0);
+            return { marketing, organic, walkins, returning, totalLeads, consultationBooked, appointmentsBooked, consultationCancelled, appointmentCancelled };
         }
 
         // ==================== DATA ENTRY ====================
@@ -1006,9 +1034,12 @@
                 // Stammkunden
                 returning: num('entry-returning'),
                 returningBooked: num('entry-returning-booked'),
-                // Beratungen & Termine
+                // Beratungen
                 consultationsDone: num('entry-consultations-done'),
-                cancelled: num('entry-cancelled'),
+                consultationCancelled: num('entry-consultation-cancelled'),
+                // Termine
+                appointmentsBooked: num('entry-appointments-booked'),
+                appointmentCancelled: num('entry-appointment-cancelled'),
                 noshows: num('entry-noshows'),
                 // Umsatz
                 tattoosDone: num('entry-tattoos-done'),
@@ -1036,7 +1067,8 @@
                 'entry-organic-leads', 'entry-organic-booked',
                 'entry-walkins', 'entry-walkins-booked',
                 'entry-returning', 'entry-returning-booked',
-                'entry-consultations-done', 'entry-cancelled', 'entry-noshows',
+                'entry-consultations-done', 'entry-consultation-cancelled',
+                'entry-appointments-booked', 'entry-appointment-cancelled', 'entry-noshows',
                 'entry-tattoos-done', 'entry-revenue'
             ];
             ids.forEach(id => document.getElementById(id).value = '');
@@ -1063,7 +1095,9 @@
             document.getElementById('entry-returning').value = entry.returning || '';
             document.getElementById('entry-returning-booked').value = entry.returningBooked || '';
             document.getElementById('entry-consultations-done').value = entry.consultationsDone || '';
-            document.getElementById('entry-cancelled').value = entry.cancelled || '';
+            document.getElementById('entry-consultation-cancelled').value = entry.consultationCancelled || '';
+            document.getElementById('entry-appointments-booked').value = entry.appointmentsBooked || '';
+            document.getElementById('entry-appointment-cancelled').value = entry.appointmentCancelled || (entry.cancelled || '');
             document.getElementById('entry-noshows').value = entry.noshows || '';
             document.getElementById('entry-tattoos-done').value = entry.tattoosDone || '';
             document.getElementById('entry-revenue').value = entry.revenue || '';
@@ -1115,7 +1149,7 @@
                 monday.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + ' – ' +
                 sunday.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-            let totals = { marketing: 0, organic: 0, walkins: 0, returning: 0, leads: 0, consultations: 0, booked: 0, revenue: 0 };
+            let totals = { marketing: 0, organic: 0, walkins: 0, returning: 0, leads: 0, consultations: 0, appointmentsBooked: 0, consultationCancelled: 0, appointmentCancelled: 0, revenue: 0 };
 
             entries.forEach(e => {
                 const t = entryTotals(e);
@@ -1124,12 +1158,14 @@
                 totals.walkins += t.walkins;
                 totals.returning += t.returning;
                 totals.leads += t.totalLeads;
-                totals.booked += t.totalBooked;
+                totals.appointmentsBooked += t.appointmentsBooked;
+                totals.consultationCancelled += t.consultationCancelled;
+                totals.appointmentCancelled += t.appointmentCancelled;
                 totals.consultations += e.consultationsDone || 0;
                 totals.revenue += e.revenue || 0;
             });
 
-            const conversion = totals.leads > 0 ? Math.round((totals.booked / totals.leads) * 100) : 0;
+            const conversion = totals.consultations > 0 ? Math.round((totals.appointmentsBooked / totals.consultations) * 100) : 0;
 
             document.getElementById('kpi-leads-total').textContent = totals.leads;
             document.getElementById('kpi-marketing').textContent = totals.marketing;
@@ -1137,7 +1173,9 @@
             document.getElementById('kpi-walkins').textContent = totals.walkins;
             document.getElementById('kpi-returning').textContent = totals.returning;
             document.getElementById('kpi-consultations').textContent = totals.consultations;
-            document.getElementById('kpi-booked').textContent = totals.booked;
+            document.getElementById('kpi-appointments-booked').textContent = totals.appointmentsBooked;
+            document.getElementById('kpi-cancellations').textContent = totals.consultationCancelled + totals.appointmentCancelled;
+            document.getElementById('kpi-cancellations-detail').textContent = `Beratung: ${totals.consultationCancelled} | Termin: ${totals.appointmentCancelled}`;
             document.getElementById('kpi-revenue').textContent = totals.revenue.toLocaleString('de-DE') + ' €';
             document.getElementById('kpi-conversion').textContent = conversion + '%';
 
@@ -1232,12 +1270,14 @@
                     <th>Walk-Ins</th>
                     <th>Stammk.</th>
                     <th>Beratungen</th>
-                    <th>Gebucht</th>
+                    <th>Termin geb.</th>
+                    <th>Absagen</th>
                     <th>Umsatz</th>
                 </tr></thead><tbody>`;
 
             entries.forEach(e => {
                 const t = entryTotals(e);
+                const cancels = t.consultationCancelled + t.appointmentCancelled;
                 html += `<tr style="cursor:pointer;" onclick="loadEntryForEdit('${e.date}')">
                     <td>${formatDateShort(e.date)}</td>
                     <td><span class="badge badge-blue">${t.marketing}</span></td>
@@ -1245,7 +1285,8 @@
                     <td><span class="badge badge-orange">${t.walkins}</span></td>
                     <td><span class="badge badge-green">${t.returning}</span></td>
                     <td>${e.consultationsDone || 0}</td>
-                    <td><strong>${t.totalBooked}</strong></td>
+                    <td><strong>${t.appointmentsBooked}</strong></td>
+                    <td>${cancels > 0 ? '<span class="badge badge-red">' + cancels + '</span>' : '–'}</td>
                     <td style="font-weight:600;">${e.revenue ? e.revenue.toLocaleString('de-DE') + ' €' : '–'}</td>
                 </tr>`;
             });
@@ -1276,15 +1317,16 @@
                     <th>Walk-Ins</th>
                     <th>Stammk.</th>
                     <th>Beratungen</th>
-                    <th>Gebucht</th>
-                    <th>Absagen</th>
+                    <th>Termin geb.</th>
+                    <th>Ber. abges.</th>
+                    <th>Term. abges.</th>
+                    <th>No-Shows</th>
                     <th>Umsatz</th>
                     <th></th>
                 </tr></thead><tbody>`;
 
             data.forEach(e => {
                 const t = entryTotals(e);
-                const cancels = (e.cancelled || 0) + (e.noshows || 0);
                 html += `<tr>
                     <td><a href="#" onclick="event.preventDefault();loadEntryForEdit('${e.date}')" style="color:var(--text-primary);text-decoration:none;border-bottom:1px solid var(--border);">${formatDate(e.date)}</a></td>
                     <td><span class="badge badge-blue">${t.marketing}</span></td>
@@ -1292,8 +1334,10 @@
                     <td><span class="badge badge-orange">${t.walkins}</span></td>
                     <td><span class="badge badge-green">${t.returning}</span></td>
                     <td>${e.consultationsDone || 0}</td>
-                    <td><strong>${t.totalBooked}</strong></td>
-                    <td>${cancels > 0 ? '<span class="badge badge-red">' + cancels + '</span>' : '0'}</td>
+                    <td><strong>${t.appointmentsBooked}</strong></td>
+                    <td>${t.consultationCancelled > 0 ? '<span class="badge badge-yellow">' + t.consultationCancelled + '</span>' : '–'}</td>
+                    <td>${t.appointmentCancelled > 0 ? '<span class="badge badge-red">' + t.appointmentCancelled + '</span>' : '–'}</td>
+                    <td>${(e.noshows || 0) > 0 ? '<span class="badge badge-red">' + e.noshows + '</span>' : '–'}</td>
                     <td style="font-weight:600;">${e.revenue ? e.revenue.toLocaleString('de-DE') + ' €' : '–'}</td>
                     <td>
                         <button class="btn-icon" onclick="event.stopPropagation();openDeleteModal('${e.date}')" title="Löschen">
@@ -1321,7 +1365,7 @@
                 'Organische Leads', 'Organisch Gebucht', 'Organisch Quelle',
                 'Walk-Ins', 'Walk-Ins Gebucht',
                 'Stammkunden', 'Stammkunden Gebucht',
-                'Beratungen stattgefunden', 'Abgesagt', 'No-Shows',
+                'Beratungen stattgefunden', 'Beratung abgesagt', 'Termin gebucht', 'Termin abgesagt', 'No-Shows',
                 'Tattoos', 'Umsatz', 'Notizen'
             ];
             const rows = data.map(e => [
@@ -1330,7 +1374,7 @@
                 e.organicLeads || 0, e.organicBooked || 0, `"${(e.organicSource || '').replace(/"/g, '""')}"`,
                 e.walkins || 0, e.walkinsBooked || 0,
                 e.returning || 0, e.returningBooked || 0,
-                e.consultationsDone || 0, e.cancelled || 0, e.noshows || 0,
+                e.consultationsDone || 0, e.consultationCancelled || 0, e.appointmentsBooked || 0, e.appointmentCancelled || (e.cancelled || 0), e.noshows || 0,
                 e.tattoosDone || 0, e.revenue || 0, `"${(e.notes || '').replace(/"/g, '""')}"`
             ]);
 
@@ -1376,7 +1420,7 @@
             }
 
             // Aggregate current week
-            let w = { marketing: 0, organic: 0, walkins: 0, returning: 0, leads: 0, booked: 0, consultations: 0, revenue: 0, unreachable: 0, conversation: 0, cancelled: 0, noshows: 0, tattoos: 0 };
+            let w = { marketing: 0, organic: 0, walkins: 0, returning: 0, leads: 0, appointmentsBooked: 0, consultations: 0, revenue: 0, unreachable: 0, conversation: 0, consultationCancelled: 0, appointmentCancelled: 0, noshows: 0, tattoos: 0 };
             entries.forEach(e => {
                 const t = entryTotals(e);
                 w.marketing += t.marketing;
@@ -1384,28 +1428,29 @@
                 w.walkins += t.walkins;
                 w.returning += t.returning;
                 w.leads += t.totalLeads;
-                w.booked += t.totalBooked;
+                w.appointmentsBooked += t.appointmentsBooked;
                 w.consultations += e.consultationsDone || 0;
                 w.revenue += e.revenue || 0;
                 w.unreachable += e.marketingUnreachable || 0;
                 w.conversation += e.marketingConversation || 0;
-                w.cancelled += e.cancelled || 0;
+                w.consultationCancelled += t.consultationCancelled;
+                w.appointmentCancelled += t.appointmentCancelled;
                 w.noshows += e.noshows || 0;
                 w.tattoos += e.tattoosDone || 0;
             });
 
             // Aggregate previous week
-            let pw = { leads: 0, marketing: 0, consultations: 0, booked: 0, revenue: 0 };
+            let pw = { leads: 0, marketing: 0, consultations: 0, appointmentsBooked: 0, revenue: 0 };
             prevEntries.forEach(e => {
                 const t = entryTotals(e);
                 pw.leads += t.totalLeads;
                 pw.marketing += t.marketing;
                 pw.consultations += e.consultationsDone || 0;
-                pw.booked += t.totalBooked;
+                pw.appointmentsBooked += t.appointmentsBooked;
                 pw.revenue += e.revenue || 0;
             });
 
-            const conversion = w.leads > 0 ? Math.round((w.booked / w.leads) * 100) : 0;
+            const conversion = w.consultations > 0 ? Math.round((w.appointmentsBooked / w.consultations) * 100) : 0;
             const avgRevenue = w.tattoos > 0 ? Math.round(w.revenue / w.tattoos) : 0;
             const marketingPct = w.leads > 0 ? Math.round(w.marketing / w.leads * 100) : 0;
 
@@ -1439,8 +1484,8 @@
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Termine gebucht</div>
-                        <div class="kpi-value">${w.booked}</div>
-                        ${trend(w.booked, pw.booked)}
+                        <div class="kpi-value">${w.appointmentsBooked}</div>
+                        ${trend(w.appointmentsBooked, pw.appointmentsBooked)}
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Umsatz</div>
@@ -1465,10 +1510,11 @@
                 <div class="recap-card">
                     <h4>Performance</h4>
                     <p>
-                        Conversion Rate (Lead → Termin): <span class="recap-highlight">${conversion}%</span><br>
+                        Conversion Rate (Beratung → Termin): <span class="recap-highlight">${conversion}%</span><br>
                         Tattoos stattgefunden: <span class="recap-highlight">${w.tattoos}</span><br>
                         Durchschnittlicher Umsatz pro Tattoo: <span class="recap-highlight">${avgRevenue.toLocaleString('de-DE')} €</span><br>
-                        Absagen / Verschoben: <span class="recap-highlight">${w.cancelled}</span> &nbsp;|&nbsp;
+                        Beratung abgesagt/verschoben: <span class="recap-highlight">${w.consultationCancelled}</span> &nbsp;|&nbsp;
+                        Termin abgesagt/verschoben: <span class="recap-highlight">${w.appointmentCancelled}</span> &nbsp;|&nbsp;
                         No-Shows: <span class="recap-highlight">${w.noshows}</span>
                     </p>
                 </div>
@@ -1488,7 +1534,7 @@
                         <span class="recap-highlight">${w.walkins}</span> als Walk-Ins und
                         <span class="recap-highlight">${w.returning}</span> über Stammkunden.
                         <span class="recap-highlight">${w.consultations} Beratungen</span> haben stattgefunden und
-                        <span class="recap-highlight">${w.booked} Termine</span> wurden gebucht.
+                        <span class="recap-highlight">${w.appointmentsBooked} Termine</span> wurden gebucht.
                         ${w.revenue > 0 ? `Der Gesamtumsatz liegt bei <span class="recap-highlight">${w.revenue.toLocaleString('de-DE')} €</span>${w.tattoos > 0 ? ` bei ${w.tattoos} durchgeführten Tattoos` : ''}.` : ''}
                         ${pw.leads > 0 ? (w.leads > pw.leads ? `Im Vergleich zur Vorwoche konnten die Leads um ${Math.round(((w.leads - pw.leads) / pw.leads) * 100)}% gesteigert werden.` : w.leads < pw.leads ? `Die Leads sind im Vergleich zur Vorwoche um ${Math.round(((pw.leads - w.leads) / pw.leads) * 100)}% gesunken.` : 'Die Leads sind auf dem gleichen Niveau wie in der Vorwoche.') : ''}
                     </p>
